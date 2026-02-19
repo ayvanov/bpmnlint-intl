@@ -1,9 +1,8 @@
-const { expect } = require('chai');
+import {expect} from 'chai';
 
-const {
-  Linter
-} = require('bpmnlint');
-
+import {
+  Linter,
+} from '../../lib/index.js';
 
 describe('index', function() {
 
@@ -11,11 +10,10 @@ describe('index', function() {
     expect(Linter).to.exist;
   });
 
-
   it('should ES export { Linter }', async function() {
 
     // when
-    const { Linter } = await import('bpmnlint');
+    const {Linter} = await import('../../lib/index.js');
 
     // then
     expect(Linter).to.exist;

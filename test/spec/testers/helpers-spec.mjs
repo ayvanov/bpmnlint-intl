@@ -1,7 +1,7 @@
 import {
   createModdle,
   readModdle
-} from 'bpmnlint/lib/testers/helper.js';
+} from '../../../lib/testers/helper.js';
 
 import {
   is
@@ -9,7 +9,7 @@ import {
 
 import {
   expect
-} from '../../helper.mjs';
+} from 'chai';
 
 const testModdle = {
   name: 'TestModdle',
