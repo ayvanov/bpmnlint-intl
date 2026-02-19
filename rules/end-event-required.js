@@ -35,7 +35,7 @@ module.exports = function() {
     if (!hasEndEvent(node)) {
       const type = is(node, 'bpmn:SubProcess') ? 'Sub process' : 'Process';
 
-      reporter.report(node.id, type + ' is missing end event');
+      reporter.report(node.id, type + ' не имеет события окончания');
     }
   }
 

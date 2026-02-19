@@ -25,12 +25,12 @@ module.exports = function() {
     const outgoing = node.outgoing || [];
 
     if (outgoing.length < 2) {
-      reporter.report(node.id, 'An <Event-based Gateway> must have at least 2 outgoing <Sequence Flows>');
+      reporter.report(node.id, 'Шлюз на основе событий должен иметь не менее 2 исходящих потоков последовательности');
     }
 
     outgoing.forEach((flow) => {
       if (hasCondition(flow)) {
-        reporter.report(flow.id, 'A <Sequence Flow> outgoing from an <Event-based Gateway> must not be conditional');
+        reporter.report(flow.id, 'Исходящий поток последовательности из шлюза на основе событий не должен быть условным');
       }
     });
   }

@@ -89,7 +89,7 @@ module.exports = function() {
     }
 
     if (isImplicitEnd(node)) {
-      reporter.report(node.id, 'Element is an implicit end');
+      reporter.report(node.id, 'Элемент является неявным концом');
     }
   }
 

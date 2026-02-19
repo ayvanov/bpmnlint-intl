@@ -36,7 +36,7 @@ module.exports = function() {
 
     for (const link of links) {
       if (!getLinkName(link)) {
-        reporter.report(link.id, 'Link event is missing link name');
+        reporter.report(link.id, 'Событие-ссылка не имеет имени ссылки');
       }
     }
 
@@ -53,20 +53,20 @@ module.exports = function() {
       if (events.length === 1) {
         const event = events[0];
 
-        reporter.report(event.id, `Link ${isThrowEvent(event) ? 'catch' : 'throw' } event with link name <${ name }> missing in scope`);
+        reporter.report(event.id, `${isThrowEvent(event) ? 'catch' : 'throw' } событие с именем ссылки <${ name }> отсутствует в области видимости`);
         continue;
       }
 
       const catchEvents = events.filter(isCatchEvent);
       if (catchEvents.length > 1) {
         for (const event of catchEvents) {
-          reporter.report(event.id, `Duplicate link catch event with link name <${name}> in scope`);
+          reporter.report(event.id, `Duplicate link catch событие с именем ссылки <${name}> in scope`);
         }
       } else if (catchEvents.length === 0) {
 
         // all events in scope are throw events
         for (const event of events) {
-          reporter.report(event.id, `Link catch event with link name <${ name }> missing in scope`);
+          reporter.report(event.id, `catch событие с именем ссылки <${ name }> отсутствует в области видимости`);
         }
       }
     }

@@ -35,7 +35,7 @@ module.exports = function() {
     if (!hasStartEvent(node)) {
       const type = is(node, 'bpmn:SubProcess') ? 'Sub process' : 'Process';
 
-      reporter.report(node.id, type + ' is missing start event');
+      reporter.report(node.id, type + ' не имеет события начала');
     }
   }
 

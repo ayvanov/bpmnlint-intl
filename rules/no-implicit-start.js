@@ -59,7 +59,7 @@ module.exports = function() {
     }
 
     if (isImplicitStart(node)) {
-      reporter.report(node.id, 'Element is an implicit start');
+      reporter.report(node.id, 'Элемент является неявным началом');
     }
   }
 

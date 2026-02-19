@@ -27,11 +27,11 @@ module.exports = function() {
     flowElements.forEach(function(flowElement) {
 
       if (is(flowElement, 'bpmn:StartEvent')) {
-        reporter.report(flowElement.id, 'A <Start Event> is not allowed in <Ad Hoc Sub Process>');
+        reporter.report(flowElement.id, 'Событие начала не допускается в подпроцессе ad hoc');
       }
 
       if (is(flowElement, 'bpmn:EndEvent')) {
-        reporter.report(flowElement.id, 'An <End Event> is not allowed in <Ad Hoc Sub Process>');
+        reporter.report(flowElement.id, 'Событие окончания не допускается в подпроцессе ad hoc');
       }
     });
   }

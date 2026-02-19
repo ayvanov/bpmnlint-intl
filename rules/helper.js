@@ -27,7 +27,7 @@ function checkDiscouragedNodeType(type, ruleName) {
     function check(node, reporter) {
 
       if (is(node, type)) {
-        reporter.report(node.id, 'Element type <' + type + '> is discouraged');
+        reporter.report(node.id, '' + type + ' тип элемента не рекомендуется');
       }
     }
 

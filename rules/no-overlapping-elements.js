@@ -47,8 +47,8 @@ module.exports = function() {
       });
 
     // report elements
-    elementsToReport.forEach(element => reporter.report(element.id, 'Element overlaps with other element'));
-    elementsOutsideToReport.forEach(element => reporter.report(element.id, 'Element is outside of parent boundary'));
+    elementsToReport.forEach(element => reporter.report(element.id, 'Элемент перекрывается с другим элементом'));
+    elementsOutsideToReport.forEach(element => reporter.report(element.id, 'Элемент находится за пределами границы родителя'));
   }
 
   return annotateRule('no-overlapping-elements', {

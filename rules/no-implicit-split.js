@@ -34,7 +34,7 @@ module.exports = function() {
     });
 
     if (outgoingWithoutCondition.length > 1) {
-      reporter.report(node.id, 'Flow splits implicitly');
+      reporter.report(node.id, 'Поток разделяется неявно');
     }
   }
 

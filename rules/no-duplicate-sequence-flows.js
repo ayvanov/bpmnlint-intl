@@ -29,19 +29,19 @@ module.exports = function() {
     const key = flowKey(node);
 
     if (key in keyed) {
-      reporter.report(node.id, 'SequenceFlow is a duplicate');
+      reporter.report(node.id, 'Поток последовательности является дубликатом');
 
       const sourceId = node.sourceRef.id;
       const targetId = node.targetRef.id;
 
       if (!outgoingReported[sourceId]) {
-        reporter.report(sourceId, 'Duplicate outgoing sequence flows');
+        reporter.report(sourceId, 'Дублирующиеся исходящие потоки последовательности');
 
         outgoingReported[sourceId] = true;
       }
 
       if (!incomingReported[targetId]) {
-        reporter.report(targetId, 'Duplicate incoming sequence flows');
+        reporter.report(targetId, 'Дублирующиеся входящие потоки последовательности');
 
         incomingReported[targetId] = true;
       }

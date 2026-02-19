@@ -43,7 +43,7 @@ module.exports = function() {
     const outgoing = node.outgoing || [];
 
     if (!incoming.length && !outgoing.length) {
-      reporter.report(node.id, 'Element is not connected');
+      reporter.report(node.id, 'Элемент не подключен');
     }
   }
 

@@ -23,7 +23,7 @@ module.exports = function() {
     const eventDefinitions = node.eventDefinitions || [];
 
     if (eventDefinitions.length > 1) {
-      reporter.report(node.id, 'Event has multiple event definitions', [ 'eventDefinitions' ]);
+      reporter.report(node.id, 'Событие имеет несколько определений события', [ 'eventDefinitions' ]);
     }
   }
 

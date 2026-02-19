@@ -32,7 +32,7 @@ module.exports = function() {
       const eventDefinitions = flowElement.eventDefinitions || [];
 
       if (eventDefinitions.length > 0) {
-        reporter.report(flowElement.id, 'Start event must be blank', [ 'eventDefinitions' ]);
+        reporter.report(flowElement.id, 'Событие начала должно быть пустым', [ 'eventDefinitions' ]);
       }
     });
   }

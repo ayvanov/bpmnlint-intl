@@ -45,7 +45,7 @@ module.exports = function() {
     if (superfluous) {
 
       for (const node of terminateEnds) {
-        reporter.report(node.id, 'Termination is superfluous.');
+        reporter.report(node.id, 'Завершение избыточно.');
       }
     }
   }

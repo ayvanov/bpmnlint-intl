@@ -37,7 +37,7 @@ module.exports = function() {
     if (blankStartEvents.length > 1) {
       const type = is(node, 'bpmn:SubProcess') ? 'Sub process' : 'Process';
 
-      reporter.report(node.id, type + ' has multiple blank start events');
+      reporter.report(node.id, type + ' имеет несколько пустых событий начала');
     }
   }
 

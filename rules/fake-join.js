@@ -30,7 +30,7 @@ module.exports = function() {
     const incoming = node.incoming || [];
 
     if (incoming.length > 1) {
-      reporter.report(node.id, 'Incoming flows do not join');
+      reporter.report(node.id, 'Входящие потоки не соединяются');
     }
   }
 

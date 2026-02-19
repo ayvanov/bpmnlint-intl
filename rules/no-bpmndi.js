@@ -41,7 +41,7 @@ module.exports = function() {
     // (4) Report elements without BPMNDI
     visualBpmnElements.forEach((element) => {
       if (diBpmnReferences.indexOf(element.id) === -1) {
-        reporter.report(element.id, 'Element is missing bpmndi');
+        reporter.report(element.id, 'Элемент не имеет bpmndi');
       }
     });
   }

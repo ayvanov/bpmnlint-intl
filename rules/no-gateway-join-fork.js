@@ -25,7 +25,7 @@ module.exports = function() {
     const outgoing = node.outgoing || [];
 
     if (incoming.length > 1 && outgoing.length > 1) {
-      reporter.report(node.id, 'Gateway forks and joins');
+      reporter.report(node.id, 'Шлюз разделяет и объединяет');
     }
   }
 

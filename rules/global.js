@@ -40,15 +40,15 @@ module.exports = function() {
 
     rootElements.forEach(rootElement => {
       if (!hasName(rootElement)) {
-        reporter.report(rootElement.id, 'Element is missing name');
+        reporter.report(rootElement.id, 'Элемент не имеет имени');
       }
 
       if (!isReferenced(rootElement, referencingElements)) {
-        reporter.report(rootElement.id, 'Element is unused');
+        reporter.report(rootElement.id, 'Элемент не используется');
       }
 
       if (!isUnique(rootElement, rootElements)) {
-        reporter.report(rootElement.id, 'Element name is not unique');
+        reporter.report(rootElement.id, 'Имя элемента не является уникальным');
       }
     });
 

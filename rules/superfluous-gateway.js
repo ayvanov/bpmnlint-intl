@@ -26,7 +26,7 @@ module.exports = function() {
     const outgoing = node.outgoing || [];
 
     if (incoming.length === 1 && outgoing.length === 1) {
-      reporter.report(node.id, 'Gateway is superfluous. It only has one source and target.');
+      reporter.report(node.id, 'Шлюз избыточен. У него только один источник и одна цель.');
     }
   }
 
