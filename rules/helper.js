@@ -1,6 +1,6 @@
-const { is } = require("bpmnlint-utils");
+import { is } from "bpmnlint-utils";
 
-const { t, setLocale, getLocale } = require("./i18n");
+import { t, setLocale, getLocale } from "./i18n.js";
 
 /**
  * @typedef { import('../lib/types.js').ModdleElement } ModdleElement
@@ -16,7 +16,7 @@ const { t, setLocale, getLocale } = require("./i18n");
  *
  * @return { RuleFactory } ruleFactory
  */
-function checkDiscouragedNodeType(type, ruleName) {
+export function checkDiscouragedNodeType(type, ruleName) {
   /**
    * @type { RuleFactory }
    */
@@ -33,12 +33,6 @@ function checkDiscouragedNodeType(type, ruleName) {
   };
 }
 
-module.exports.checkDiscouragedNodeType = checkDiscouragedNodeType;
-
-module.exports.t = t;
-module.exports.setLocale = setLocale;
-module.exports.getLocale = getLocale;
-
 /**
  * Find a parent for the given element
  *
@@ -47,7 +41,7 @@ module.exports.getLocale = getLocale;
  *
  * @return { ModdleElement } element
  */
-function findParent(node, type) {
+export function findParent(node, type) {
   if (!node) {
     return null;
   }
@@ -65,8 +59,6 @@ function findParent(node, type) {
   return findParent(parent, type);
 }
 
-module.exports.findParent = findParent;
-
 /**
  * Check if the node is inside of an executable process.
  *
@@ -74,13 +66,11 @@ module.exports.findParent = findParent;
  *
  * @return { boolean }
  */
-function isInExecutableProcess(node) {
+export function isInExecutableProcess(node) {
   const process = findParent(node, "bpmn:Process");
 
   return process && process.isExecutable;
 }
-
-module.exports.isInExecutableProcess = isInExecutableProcess;
 
 const documentationBaseUrl =
   "https://github.com/bpmn-io/bpmnlint/blob/main/docs/rules";
@@ -93,7 +83,7 @@ const documentationBaseUrl =
  *
  * @return {RuleDefinition}
  */
-function annotateRule(ruleName, options) {
+export function annotateRule(ruleName, options) {
   const { meta: { documentation = {}, ...restMeta } = {}, ...restOptions } =
     options;
 
@@ -111,4 +101,4 @@ function annotateRule(ruleName, options) {
   };
 }
 
-module.exports.annotateRule = annotateRule;
+export { t, setLocale, getLocale };
