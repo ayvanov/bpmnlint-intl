@@ -1,7 +1,4 @@
-const {
-  annotateRule
-} = require('./helper');
-
+const { annotateRule, t } = require("./helper");
 
 /**
  * A rule that checks that sequence flows outgoing from a
@@ -10,10 +7,8 @@ const {
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-
     if (!isConditionalForking(node)) {
       return;
     }
@@ -21,29 +16,26 @@ module.exports = function() {
     const outgoing = node.outgoing || [];
 
     outgoing.forEach((flow) => {
-      const missingCondition = (
-        !hasCondition(flow) &&
-        !isDefaultFlow(node, flow)
-      );
+      const missingCondition =
+        !hasCondition(flow) && !isDefaultFlow(node, flow);
 
       if (missingCondition) {
-        reporter.report(flow.id, 'Sequence flow is missing condition', [ 'conditionExpression' ]);
+        reporter.report(flow.id, t("conditionalFlows.missingCondition"), [
+          "conditionExpression",
+        ]);
       }
     });
   }
 
-  return annotateRule('conditional-flows', {
-    check
+  return annotateRule("conditional-flows", {
+    check,
   });
-
 };
-
 
 // helpers /////////////////////////////
 
 function isConditionalForking(node) {
-
-  const defaultFlow = node['default'];
+  const defaultFlow = node["default"];
   const outgoing = node.outgoing || [];
 
   return defaultFlow || outgoing.find(hasCondition);
@@ -54,5 +46,5 @@ function hasCondition(flow) {
 }
 
 function isDefaultFlow(node, flow) {
-  return node['default'] === flow;
+  return node["default"] === flow;
 }

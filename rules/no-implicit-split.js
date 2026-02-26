@@ -1,11 +1,8 @@
-const {
-  isAny
-} = require('bpmnlint-utils');
+"use strict";
 
-const {
-  annotateRule
-} = require('./helper');
+const { isAny } = require("bpmnlint-utils");
 
+const { annotateRule, t } = require("./helper");
 
 /**
  * A rule that checks that no implicit split is modeled
@@ -16,14 +13,9 @@ const {
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-
-    if (!isAny(node, [
-      'bpmn:Activity',
-      'bpmn:Event'
-    ])) {
+    if (!isAny(node, ["bpmn:Activity", "bpmn:Event"])) {
       return;
     }
 
@@ -34,16 +26,14 @@ module.exports = function() {
     });
 
     if (outgoingWithoutCondition.length > 1) {
-      reporter.report(node.id, 'Flow splits implicitly');
+      reporter.report(node.id, t("noImplicitSplit.implicitSplit"));
     }
   }
 
-  return annotateRule('no-implicit-split', {
-    check
+  return annotateRule("no-implicit-split", {
+    check,
   });
-
 };
-
 
 // helpers /////////////////////////////
 
@@ -52,5 +42,5 @@ function hasCondition(flow) {
 }
 
 function isDefaultFlow(node, flow) {
-  return node['default'] === flow;
+  return node["default"] === flow;
 }

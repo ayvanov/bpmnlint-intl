@@ -1,11 +1,8 @@
-const {
-  is
-} = require('bpmnlint-utils');
+"use strict";
 
-const {
-  annotateRule
-} = require('./helper');
+const { is } = require("bpmnlint-utils");
 
+const { annotateRule, t } = require("./helper");
 
 /**
  * Rule that checks if two elements overlap except:
@@ -15,10 +12,9 @@ const {
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-    if (!is(node, 'bpmn:Definitions')) {
+    if (!is(node, "bpmn:Definitions")) {
       return;
     }
 
@@ -29,30 +25,43 @@ module.exports = function() {
     const processElementsParentDiMap = new Map(); // map with sub/process as key and its parent boundary di object
 
     rootElements
-      .filter(element => is(element, 'bpmn:Collaboration'))
-      .forEach(collaboration => {
+      .filter((element) => is(element, "bpmn:Collaboration"))
+      .forEach((collaboration) => {
         const participants = collaboration.participants || [];
         checkElementsArray(participants, elementsToReport, diObjects);
 
-        participants.forEach(participant => {
-          processElementsParentDiMap.set(participant.processRef, diObjects.get(participant));
+        participants.forEach((participant) => {
+          processElementsParentDiMap.set(
+            participant.processRef,
+            diObjects.get(participant),
+          );
         });
       });
 
     rootElements
-      .filter(element => is(element, 'bpmn:Process'))
-      .forEach(process => {
+      .filter((element) => is(element, "bpmn:Process"))
+      .forEach((process) => {
         const parentDi = processElementsParentDiMap.get(process) || {};
-        checkProcess(process, elementsToReport, elementsOutsideToReport, diObjects, parentDi);
+        checkProcess(
+          process,
+          elementsToReport,
+          elementsOutsideToReport,
+          diObjects,
+          parentDi,
+        );
       });
 
     // report elements
-    elementsToReport.forEach(element => reporter.report(element.id, 'Element overlaps with other element'));
-    elementsOutsideToReport.forEach(element => reporter.report(element.id, 'Element is outside of parent boundary'));
+    elementsToReport.forEach((element) =>
+      reporter.report(element.id, t("noOverlappingElements.overlaps")),
+    );
+    elementsOutsideToReport.forEach((element) =>
+      reporter.report(element.id, t("noOverlappingElements.outsideBoundary")),
+    );
   }
 
-  return annotateRule('no-overlapping-elements', {
-    check
+  return annotateRule("no-overlapping-elements", {
+    check,
   });
 };
 
@@ -65,11 +74,18 @@ module.exports = function() {
  * @param {Set} elementsOutsideToReport
  * @param {Map} diObjects
  */
-function checkProcess(node, elementsToReport, elementsOutsideToReport, diObjects, parentDi) {
-
+function checkProcess(
+  node,
+  elementsToReport,
+  elementsOutsideToReport,
+  diObjects,
+  parentDi,
+) {
   const flowElements = node.flowElements || [];
 
-  const flowElementsWithDi = flowElements.filter(element => diObjects.has(element));
+  const flowElementsWithDi = flowElements.filter((element) =>
+    diObjects.has(element),
+  );
 
   // check child elements for overlap
   checkElementsArray(flowElementsWithDi, elementsToReport, diObjects);
@@ -80,9 +96,9 @@ function checkProcess(node, elementsToReport, elementsOutsideToReport, diObjects
   //   * for historical reasons data store references may be
   //     outside of parent boundaries
   //
-  flowElementsWithDi.forEach(element => {
+  flowElementsWithDi.forEach((element) => {
     if (
-      !is(element, 'bpmn:DataStoreReference') &&
+      !is(element, "bpmn:DataStoreReference") &&
       isOutsideParentBoundary(diObjects.get(element).bounds, parentDi.bounds)
     ) {
       elementsOutsideToReport.add(element);
@@ -90,11 +106,21 @@ function checkProcess(node, elementsToReport, elementsOutsideToReport, diObjects
   });
 
   // recurse into subprocesses
-  const subProcesses = flowElements.filter(element => is(element, 'bpmn:SubProcess'));
-  subProcesses.forEach(subProcess => {
+  const subProcesses = flowElements.filter((element) =>
+    is(element, "bpmn:SubProcess"),
+  );
+  subProcesses.forEach((subProcess) => {
     const subProcessDi = diObjects.get(subProcess) || {};
-    const subProcessParentBoundary = subProcessDi.isExpanded ? subProcessDi : {};
-    checkProcess(subProcess, elementsToReport, elementsOutsideToReport, diObjects, subProcessParentBoundary);
+    const subProcessParentBoundary = subProcessDi.isExpanded
+      ? subProcessDi
+      : {};
+    checkProcess(
+      subProcess,
+      elementsToReport,
+      elementsOutsideToReport,
+      diObjects,
+      subProcessParentBoundary,
+    );
   });
 }
 
@@ -111,7 +137,10 @@ function checkElementsArray(elements, elementsToReport, diObjects) {
 
       // ignore if Boundary events overlap their host
       // but still check if they overlap other elements
-      if (element.attachedToRef === element2 || element2.attachedToRef === element) {
+      if (
+        element.attachedToRef === element2 ||
+        element2.attachedToRef === element
+      ) {
         continue;
       }
 
@@ -139,8 +168,11 @@ function isOutsideParentBoundary(childBounds, parentBounds) {
     return false;
   }
 
-  const isTopLeftCornerInside = childBounds.x >= parentBounds.x && childBounds.y >= parentBounds.y;
-  const isBottomRightCornerInside = childBounds.x + childBounds.width <= parentBounds.x + parentBounds.width && childBounds.y + childBounds.height <= parentBounds.y + parentBounds.height;
+  const isTopLeftCornerInside =
+    childBounds.x >= parentBounds.x && childBounds.y >= parentBounds.y;
+  const isBottomRightCornerInside =
+    childBounds.x + childBounds.width <= parentBounds.x + parentBounds.width &&
+    childBounds.y + childBounds.height <= parentBounds.y + parentBounds.height;
   const isInside = isTopLeftCornerInside && isBottomRightCornerInside;
 
   return !isInside;
@@ -154,8 +186,12 @@ function isCollision(firstBounds, secondBounds) {
     return false;
   }
 
-  const collisionX = firstBounds.x + firstBounds.width >= secondBounds.x && secondBounds.x + secondBounds.width >= firstBounds.x;
-  const collisionY = firstBounds.y + firstBounds.height >= secondBounds.y && secondBounds.y + secondBounds.height >= firstBounds.y;
+  const collisionX =
+    firstBounds.x + firstBounds.width >= secondBounds.x &&
+    secondBounds.x + secondBounds.width >= firstBounds.x;
+  const collisionY =
+    firstBounds.y + firstBounds.height >= secondBounds.y &&
+    secondBounds.y + secondBounds.height >= firstBounds.y;
 
   // collision on both axis
   return collisionX && collisionY;
@@ -165,11 +201,14 @@ function isCollision(firstBounds, secondBounds) {
  * Checks if shape bounds has all necessary values for collision check
  */
 function isValidShapeElement(bounds) {
-  return !!bounds && is(bounds, 'dc:Bounds') &&
-    typeof (bounds.x) === 'number' &&
-    typeof (bounds.y) === 'number' &&
-    typeof (bounds.width) === 'number' &&
-    typeof (bounds.height) === 'number';
+  return (
+    !!bounds &&
+    is(bounds, "dc:Bounds") &&
+    typeof bounds.x === "number" &&
+    typeof bounds.y === "number" &&
+    typeof bounds.width === "number" &&
+    typeof bounds.height === "number"
+  );
 }
 
 /**
@@ -182,12 +221,12 @@ function getAllDiObjects(node) {
   const diagrams = node.diagrams || [];
 
   diagrams
-    .filter(diagram => !!diagram.plane)
-    .forEach(diagram => {
+    .filter((diagram) => !!diagram.plane)
+    .forEach((diagram) => {
       const planeElements = diagram.plane.planeElement || [];
       planeElements
-        .filter(planeElement => !!planeElement.bpmnElement)
-        .forEach(planeElement => {
+        .filter((planeElement) => !!planeElement.bpmnElement)
+        .forEach((planeElement) => {
           diObjects.set(planeElement.bpmnElement, planeElement);
         });
     });

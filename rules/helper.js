@@ -1,6 +1,6 @@
-const {
-  is
-} = require('bpmnlint-utils');
+const { is } = require("bpmnlint-utils");
+
+const { t, setLocale, getLocale } = require("./i18n");
 
 /**
  * @typedef { import('../lib/types.js').ModdleElement } ModdleElement
@@ -8,7 +8,6 @@ const {
  * @typedef { import('../lib/types.js').RuleFactory } RuleFactory
  * @typedef { import('../lib/types.js').RuleDefinition } RuleDefinition
  */
-
 
 /**
  * Create a checker that disallows the given element type.
@@ -18,29 +17,27 @@ const {
  * @return { RuleFactory } ruleFactory
  */
 function checkDiscouragedNodeType(type, ruleName) {
-
   /**
    * @type { RuleFactory }
    */
-  return function() {
-
+  return function () {
     function check(node, reporter) {
-
       if (is(node, type)) {
-        reporter.report(node.id, 'Element type <' + type + '> is discouraged');
+        reporter.report(node.id, t("helper.discouragedType", { type }));
       }
     }
 
     return annotateRule(ruleName, {
-      check
+      check,
     });
-
   };
-
 }
 
 module.exports.checkDiscouragedNodeType = checkDiscouragedNodeType;
 
+module.exports.t = t;
+module.exports.setLocale = setLocale;
+module.exports.getLocale = getLocale;
 
 /**
  * Find a parent for the given element
@@ -70,7 +67,6 @@ function findParent(node, type) {
 
 module.exports.findParent = findParent;
 
-
 /**
  * Check if the node is inside of an executable process.
  *
@@ -79,15 +75,15 @@ module.exports.findParent = findParent;
  * @return { boolean }
  */
 function isInExecutableProcess(node) {
-  const process = findParent(node, 'bpmn:Process');
+  const process = findParent(node, "bpmn:Process");
 
   return process && process.isExecutable;
 }
 
 module.exports.isInExecutableProcess = isInExecutableProcess;
 
-
-const documentationBaseUrl = 'https://github.com/bpmn-io/bpmnlint/blob/main/docs/rules';
+const documentationBaseUrl =
+  "https://github.com/bpmn-io/bpmnlint/blob/main/docs/rules";
 
 /**
  * Annotate a rule with core information, such as the documentation url.
@@ -98,14 +94,8 @@ const documentationBaseUrl = 'https://github.com/bpmn-io/bpmnlint/blob/main/docs
  * @return {RuleDefinition}
  */
 function annotateRule(ruleName, options) {
-
-  const {
-    meta: {
-      documentation = {},
-      ...restMeta
-    } = {},
-    ...restOptions
-  } = options;
+  const { meta: { documentation = {}, ...restMeta } = {}, ...restOptions } =
+    options;
 
   const documentationUrl = `${documentationBaseUrl}/${ruleName}.md`;
 
@@ -113,11 +103,11 @@ function annotateRule(ruleName, options) {
     meta: {
       documentation: {
         url: documentationUrl,
-        ...documentation
+        ...documentation,
       },
-      ...restMeta
+      ...restMeta,
     },
-    ...restOptions
+    ...restOptions,
   };
 }
 

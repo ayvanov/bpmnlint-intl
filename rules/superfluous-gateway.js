@@ -1,11 +1,8 @@
-const {
-  is
-} = require('bpmnlint-utils');
+"use strict";
 
-const {
-  annotateRule
-} = require('./helper');
+const { is } = require("bpmnlint-utils");
 
+const { annotateRule, t } = require("./helper");
 
 /**
  * A rule that checks, whether a gateway has only one source and target.
@@ -14,11 +11,9 @@ const {
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-
-    if (!is(node, 'bpmn:Gateway')) {
+    if (!is(node, "bpmn:Gateway")) {
       return;
     }
 
@@ -26,12 +21,11 @@ module.exports = function() {
     const outgoing = node.outgoing || [];
 
     if (incoming.length === 1 && outgoing.length === 1) {
-      reporter.report(node.id, 'Gateway is superfluous. It only has one source and target.');
+      reporter.report(node.id, t("superfluousGateway.superfluous"));
     }
   }
 
-  return annotateRule('superfluous-gateway', {
-    check
+  return annotateRule("superfluous-gateway", {
+    check,
   });
-
 };

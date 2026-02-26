@@ -1,22 +1,14 @@
-const {
-  is
-} = require('bpmnlint-utils');
+const { is } = require("bpmnlint-utils");
 
-const {
-  annotateRule,
-  isInExecutableProcess
-} = require('./helper');
-
+const { annotateRule, isInExecutableProcess, t } = require("./helper");
 
 /**
  * Ensures that a conditional event has a condition specified.
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-
     if (!isInExecutableProcess(node)) {
       return;
     }
@@ -28,23 +20,26 @@ module.exports = function() {
     }
 
     if (!hasCondition(eventDefinition)) {
-      reporter.report(node.id, 'Conditional event is missing a condition', [ 'condition' ]);
+      reporter.report(node.id, t("conditionalEvent.missingCondition"), [
+        "condition",
+      ]);
     }
   }
 
-  return annotateRule('conditional-event', {
-    check
+  return annotateRule("conditional-event", {
+    check,
   });
-
 };
 
 function getConditionalEventDefinition(node) {
-  if (!is(node, 'bpmn:Event')) {
+  if (!is(node, "bpmn:Event")) {
     return;
   }
 
   const eventDefinitions = node.eventDefinitions || [];
-  return eventDefinitions.find(def => is(def, 'bpmn:ConditionalEventDefinition'));
+  return eventDefinitions.find((def) =>
+    is(def, "bpmn:ConditionalEventDefinition"),
+  );
 }
 
 function hasCondition(eventDefinition) {

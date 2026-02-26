@@ -1,15 +1,10 @@
-const {
-  groupBy
-} = require('min-dash');
+"use strict";
 
-const {
-  is
-} = require('bpmnlint-utils');
+const { groupBy } = require("min-dash");
 
-const {
-  annotateRule
-} = require('./helper');
+const { is } = require("bpmnlint-utils");
 
+const { annotateRule, t } = require("./helper");
 
 /**
  * A rule that verifies that link events are properly used.
@@ -24,11 +19,9 @@ const {
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-
-    if (!is(node, 'bpmn:FlowElementsContainer')) {
+    if (!is(node, "bpmn:FlowElementsContainer")) {
       return;
     }
 
@@ -36,14 +29,13 @@ module.exports = function() {
 
     for (const link of links) {
       if (!getLinkName(link)) {
-        reporter.report(link.id, 'Link event is missing link name');
+        reporter.report(link.id, t("linkEvent.missingLinkName"));
       }
     }
 
-    const names = groupBy(links, link => getLinkName(link));
+    const names = groupBy(links, (link) => getLinkName(link));
 
-    for (const [ name, events ] of Object.entries(names)) {
-
+    for (const [name, events] of Object.entries(names)) {
       // ignore unnamed (validated earlier)
       if (!name) {
         continue;
@@ -52,56 +44,61 @@ module.exports = function() {
       // missing catch or throw event
       if (events.length === 1) {
         const event = events[0];
+        const direction = isThrowEvent(event)
+          ? t("directions.catch")
+          : t("directions.throw");
 
-        reporter.report(event.id, `Link ${isThrowEvent(event) ? 'catch' : 'throw' } event with link name <${ name }> missing in scope`);
+        reporter.report(
+          event.id,
+          t("linkEvent.missingCounterpart", { direction, name }),
+        );
         continue;
       }
 
       const catchEvents = events.filter(isCatchEvent);
+
       if (catchEvents.length > 1) {
         for (const event of catchEvents) {
-          reporter.report(event.id, `Duplicate link catch event with link name <${name}> in scope`);
+          reporter.report(event.id, t("linkEvent.duplicateCatch", { name }));
         }
       } else if (catchEvents.length === 0) {
-
         // all events in scope are throw events
         for (const event of events) {
-          reporter.report(event.id, `Link catch event with link name <${ name }> missing in scope`);
+          reporter.report(event.id, t("linkEvent.missingCatch", { name }));
         }
       }
     }
-
   }
 
-  return annotateRule('link-event', {
-    check
+  return annotateRule("link-event", {
+    check,
   });
 };
-
 
 // helpers /////////////////
 
 function isLinkEvent(node) {
+  const eventDefinitions = node.eventDefinitions || [];
 
-  var eventDefinitions = node.eventDefinitions || [];
-
-  if (!is(node, 'bpmn:Event')) {
+  if (!is(node, "bpmn:Event")) {
     return false;
   }
 
-  return eventDefinitions.some(
-    definition => is(definition, 'bpmn:LinkEventDefinition')
+  return eventDefinitions.some((definition) =>
+    is(definition, "bpmn:LinkEventDefinition"),
   );
 }
 
 function getLinkName(linkEvent) {
-  return linkEvent.get('eventDefinitions').find(def => is(def, 'bpmn:LinkEventDefinition')).name;
+  return linkEvent
+    .get("eventDefinitions")
+    .find((def) => is(def, "bpmn:LinkEventDefinition")).name;
 }
 
 function isThrowEvent(node) {
-  return is(node, 'bpmn:ThrowEvent');
+  return is(node, "bpmn:ThrowEvent");
 }
 
 function isCatchEvent(node) {
-  return is(node, 'bpmn:CatchEvent');
+  return is(node, "bpmn:CatchEvent");
 }

@@ -1,25 +1,23 @@
-import { expect } from 'chai';
+import { expect } from "chai";
 
-import fs from 'node:fs';
+import fs from "node:fs";
 
-import allConfig from '../../config/all.js';
-import correctnessConfig from '../../config/correctness.js';
+import allConfig from "../../config/all.js";
+import correctnessConfig from "../../config/correctness.js";
 
-
-describe('config', function() {
-
-  describe('all', function() {
-
+describe("config", function () {
+  describe("all", function () {
     function getDefinedRules(folder) {
-      return fs.readdirSync(folder)
-        .filter(r => r !== 'helper.js')
-        .map(r => r.split('.')[0]);
+      const nonRuleEntries = new Set(["helper.js", "i18n.js", "locales"]);
+      return fs
+        .readdirSync(folder)
+        .filter((r) => !nonRuleEntries.has(r))
+        .map((r) => r.split(".")[0]);
     }
 
-    it('should contain all lint rules', function() {
-
+    it("should contain all lint rules", function () {
       // given
-      const definedRules = getDefinedRules('rules');
+      const definedRules = getDefinedRules("rules");
 
       // when
       const configuredRules = Object.keys(allConfig.rules);
@@ -27,24 +25,20 @@ describe('config', function() {
       // then
       expect(configuredRules).to.eql(definedRules);
     });
-
   });
 
-
-  describe('correctness', function() {
-
-    it('should contain relevant lint rules', function() {
-
+  describe("correctness", function () {
+    it("should contain relevant lint rules", function () {
       // given
       const expectedRules = [
-        'ad-hoc-sub-process',
-        'conditional-event',
-        'event-based-gateway',
-        'event-sub-process-typed-start-event',
-        'link-event',
-        'no-duplicate-sequence-flows',
-        'sub-process-blank-start-event',
-        'single-blank-start-event'
+        "ad-hoc-sub-process",
+        "conditional-event",
+        "event-based-gateway",
+        "event-sub-process-typed-start-event",
+        "link-event",
+        "no-duplicate-sequence-flows",
+        "sub-process-blank-start-event",
+        "single-blank-start-event",
       ];
 
       // when
@@ -53,7 +47,5 @@ describe('config', function() {
       // then
       expect(configuredRules).to.eql(expectedRules);
     });
-
   });
-
 });

@@ -1,11 +1,6 @@
-const {
-  is
-} = require('bpmnlint-utils');
+const { is } = require("bpmnlint-utils");
 
-const {
-  annotateRule
-} = require('./helper');
-
+const { annotateRule, t } = require("./helper");
 
 /**
  * A rule that checks that start events inside an event sub-process
@@ -13,32 +8,32 @@ const {
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-
-    if (!is(node, 'bpmn:SubProcess') || !node.triggeredByEvent) {
+    if (!is(node, "bpmn:SubProcess") || !node.triggeredByEvent) {
       return;
     }
 
     const flowElements = node.flowElements || [];
 
-    flowElements.forEach(function(flowElement) {
-
-      if (!is(flowElement, 'bpmn:StartEvent')) {
+    flowElements.forEach(function (flowElement) {
+      if (!is(flowElement, "bpmn:StartEvent")) {
         return false;
       }
 
       const eventDefinitions = flowElement.eventDefinitions || [];
 
       if (eventDefinitions.length === 0) {
-        reporter.report(flowElement.id, 'Start event is missing event definition', [ 'eventDefinitions' ]);
+        reporter.report(
+          flowElement.id,
+          t("eventSubProcessTypedStartEvent.missingEventDefinition"),
+          ["eventDefinitions"],
+        );
       }
     });
   }
 
-  return annotateRule('event-sub-process-typed-start-event', {
-    check
+  return annotateRule("event-sub-process-typed-start-event", {
+    check,
   });
-
 };

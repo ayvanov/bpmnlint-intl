@@ -1,44 +1,42 @@
-const {
-  is,
-  isAny
-} = require('bpmnlint-utils');
+const { is, isAny } = require("bpmnlint-utils");
 
-const {
-  findParent,
-  annotateRule
-} = require('./helper');
-
+const { findParent, annotateRule, t } = require("./helper");
 
 /**
  * A rule that checks that an element is not an implicit end (token sink).
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function isLinkEvent(node) {
     const eventDefinitions = node.eventDefinitions || [];
 
-    return eventDefinitions.length && eventDefinitions.every(
-      definition => is(definition, 'bpmn:LinkEventDefinition')
+    return (
+      eventDefinitions.length &&
+      eventDefinitions.every((definition) =>
+        is(definition, "bpmn:LinkEventDefinition"),
+      )
     );
   }
 
   function isCompensationEvent(node) {
     const eventDefinitions = node.eventDefinitions || [];
 
-    return eventDefinitions.length && eventDefinitions.every(
-      definition => is(definition, 'bpmn:CompensateEventDefinition')
+    return (
+      eventDefinitions.length &&
+      eventDefinitions.every((definition) =>
+        is(definition, "bpmn:CompensateEventDefinition"),
+      )
     );
   }
 
   function hasCompensationActivity(node) {
-    const parent = findParent(node, 'bpmn:Process');
+    const parent = findParent(node, "bpmn:Process");
 
     const artifacts = parent.artifacts || [];
 
     return artifacts.some((element) => {
-      if (!is(element, 'bpmn:Association')) {
+      if (!is(element, "bpmn:Association")) {
         return false;
       }
 
@@ -55,27 +53,31 @@ module.exports = function() {
   function isImplicitEnd(node) {
     const outgoing = node.outgoing || [];
 
-    if (is(node, 'bpmn:SubProcess') && node.triggeredByEvent) {
+    if (is(node, "bpmn:SubProcess") && node.triggeredByEvent) {
       return false;
     }
 
-    if (is(node, 'bpmn:IntermediateThrowEvent') && isLinkEvent(node)) {
+    if (is(node, "bpmn:IntermediateThrowEvent") && isLinkEvent(node)) {
       return false;
     }
 
-    if (is(node.$parent, 'bpmn:AdHocSubProcess')) {
+    if (is(node.$parent, "bpmn:AdHocSubProcess")) {
       return false;
     }
 
-    if (is(node, 'bpmn:EndEvent')) {
+    if (is(node, "bpmn:EndEvent")) {
       return false;
     }
 
-    if (is(node, 'bpmn:BoundaryEvent') && isCompensationEvent(node) && hasCompensationActivity(node)) {
+    if (
+      is(node, "bpmn:BoundaryEvent") &&
+      isCompensationEvent(node) &&
+      hasCompensationActivity(node)
+    ) {
       return false;
     }
 
-    if (is(node, 'bpmn:Activity') && isForCompensation(node)) {
+    if (is(node, "bpmn:Activity") && isForCompensation(node)) {
       return false;
     }
 
@@ -83,17 +85,16 @@ module.exports = function() {
   }
 
   function check(node, reporter) {
-
-    if (!isAny(node, [ 'bpmn:Event', 'bpmn:Activity', 'bpmn:Gateway' ])) {
+    if (!isAny(node, ["bpmn:Event", "bpmn:Activity", "bpmn:Gateway"])) {
       return;
     }
 
     if (isImplicitEnd(node)) {
-      reporter.report(node.id, 'Element is an implicit end');
+      reporter.report(node.id, t("noImplicitEnd.implicitEnd"));
     }
   }
 
-  return annotateRule('no-implicit-end', {
-    check
+  return annotateRule("no-implicit-end", {
+    check,
   });
 };

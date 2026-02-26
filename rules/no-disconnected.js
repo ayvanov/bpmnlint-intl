@@ -1,12 +1,8 @@
-const {
-  isAny,
-  is
-} = require('bpmnlint-utils');
+"use strict";
 
-const {
-  annotateRule
-} = require('./helper');
+const { isAny, is } = require("bpmnlint-utils");
 
+const { annotateRule, t } = require("./helper");
 
 /**
  * A rule that verifies that there exists no disconnected
@@ -14,16 +10,17 @@ const {
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-
-    if (!isAny(node, [
-      'bpmn:Task',
-      'bpmn:Gateway',
-      'bpmn:SubProcess',
-      'bpmn:Event'
-    ]) || node.triggeredByEvent) {
+    if (
+      !isAny(node, [
+        "bpmn:Task",
+        "bpmn:Gateway",
+        "bpmn:SubProcess",
+        "bpmn:Event",
+      ]) ||
+      node.triggeredByEvent
+    ) {
       return;
     }
 
@@ -35,7 +32,7 @@ module.exports = function() {
     }
 
     // adhoc subprocesses can have disconnected activities
-    if (is(node.$parent, 'bpmn:AdHocSubProcess')) {
+    if (is(node.$parent, "bpmn:AdHocSubProcess")) {
       return;
     }
 
@@ -43,23 +40,21 @@ module.exports = function() {
     const outgoing = node.outgoing || [];
 
     if (!incoming.length && !outgoing.length) {
-      reporter.report(node.id, 'Element is not connected');
+      reporter.report(node.id, t("noDisconnected.notConnected"));
     }
   }
 
-  return annotateRule('no-disconnected', {
-    check
+  return annotateRule("no-disconnected", {
+    check,
   });
 };
-
 
 // helpers /////////////////
 
 function isCompensationBoundary(node) {
-
   var eventDefinitions = node.eventDefinitions;
 
-  if (!is(node, 'bpmn:BoundaryEvent')) {
+  if (!is(node, "bpmn:BoundaryEvent")) {
     return false;
   }
 
@@ -67,7 +62,7 @@ function isCompensationBoundary(node) {
     return false;
   }
 
-  return is(eventDefinitions[0], 'bpmn:CompensateEventDefinition');
+  return is(eventDefinitions[0], "bpmn:CompensateEventDefinition");
 }
 
 function isCompensationActivity(node) {

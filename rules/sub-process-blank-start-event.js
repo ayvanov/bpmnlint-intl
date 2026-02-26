@@ -1,11 +1,8 @@
-const {
-  is
-} = require('bpmnlint-utils');
+"use strict";
 
-const {
-  annotateRule
-} = require('./helper');
+const { is } = require("bpmnlint-utils");
 
+const { annotateRule, t } = require("./helper");
 
 /**
  * A rule that checks that start events inside a normal sub-processes
@@ -13,32 +10,32 @@ const {
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-
-    if (!is(node, 'bpmn:SubProcess') || node.triggeredByEvent) {
+    if (!is(node, "bpmn:SubProcess") || node.triggeredByEvent) {
       return;
     }
 
     const flowElements = node.flowElements || [];
 
-    flowElements.forEach(function(flowElement) {
-
-      if (!is(flowElement, 'bpmn:StartEvent')) {
+    flowElements.forEach(function (flowElement) {
+      if (!is(flowElement, "bpmn:StartEvent")) {
         return false;
       }
 
       const eventDefinitions = flowElement.eventDefinitions || [];
 
       if (eventDefinitions.length > 0) {
-        reporter.report(flowElement.id, 'Start event must be blank', [ 'eventDefinitions' ]);
+        reporter.report(
+          flowElement.id,
+          t("subProcessBlankStartEvent.mustBeBlank"),
+          ["eventDefinitions"],
+        );
       }
     });
   }
 
-  return annotateRule('sub-process-blank-start-event', {
-    check
+  return annotateRule("sub-process-blank-start-event", {
+    check,
   });
-
 };

@@ -1,11 +1,8 @@
-const {
-  is
-} = require('bpmnlint-utils');
+"use strict";
 
-const {
-  annotateRule
-} = require('./helper');
+const { is } = require("bpmnlint-utils");
 
+const { annotateRule, t } = require("./helper");
 
 /**
  * A rule that checks, whether a gateway forks and joins
@@ -13,11 +10,9 @@ const {
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-
-    if (!is(node, 'bpmn:Gateway')) {
+    if (!is(node, "bpmn:Gateway")) {
       return;
     }
 
@@ -25,12 +20,11 @@ module.exports = function() {
     const outgoing = node.outgoing || [];
 
     if (incoming.length > 1 && outgoing.length > 1) {
-      reporter.report(node.id, 'Gateway forks and joins');
+      reporter.report(node.id, t("noGatewayJoinFork.forksAndJoins"));
     }
   }
 
-  return annotateRule('no-gateway-join-fork', {
-    check
+  return annotateRule("no-gateway-join-fork", {
+    check,
   });
-
 };

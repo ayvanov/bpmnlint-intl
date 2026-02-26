@@ -1,11 +1,6 @@
-const {
-  isAny
-} = require('bpmnlint-utils');
+const { isAny } = require("bpmnlint-utils");
 
-const {
-  annotateRule
-} = require('./helper');
-
+const { annotateRule, t } = require("./helper");
 
 /**
  * A rule that checks that no fake join is modeled by attempting
@@ -16,26 +11,20 @@ const {
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-
-    if (!isAny(node, [
-      'bpmn:Activity',
-      'bpmn:Event'
-    ])) {
+    if (!isAny(node, ["bpmn:Activity", "bpmn:Event"])) {
       return;
     }
 
     const incoming = node.incoming || [];
 
     if (incoming.length > 1) {
-      reporter.report(node.id, 'Incoming flows do not join');
+      reporter.report(node.id, t("fakeJoin.incomingFlowsDoNotJoin"));
     }
   }
 
-  return annotateRule('fake-join', {
-    check
+  return annotateRule("fake-join", {
+    check,
   });
-
 };

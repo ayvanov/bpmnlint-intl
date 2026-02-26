@@ -1,19 +1,12 @@
-const {
-  is
-} = require('bpmnlint-utils');
+const { is } = require("bpmnlint-utils");
 
-const {
-  flatten
-} = require('min-dash');
+const { flatten } = require("min-dash");
 
-const {
-  annotateRule
-} = require('./helper');
+const { annotateRule, t } = require("./helper");
 
 /**
  * @typedef { import('../lib/types.js').ModdleElement } ModdleElement
  */
-
 
 /**
  * A rule that checks that there is no BPMNDI information missing for elements,
@@ -21,11 +14,9 @@ const {
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-
-    if (!is(node, 'bpmn:Definitions')) {
+    if (!is(node, "bpmn:Definitions")) {
       return false;
     }
 
@@ -41,17 +32,15 @@ module.exports = function() {
     // (4) Report elements without BPMNDI
     visualBpmnElements.forEach((element) => {
       if (diBpmnReferences.indexOf(element.id) === -1) {
-        reporter.report(element.id, 'Element is missing bpmndi');
+        reporter.report(element.id, t("noBpmndi.missingBpmndi"));
       }
     });
   }
 
-  return annotateRule('no-bpmndi', {
-    check
+  return annotateRule("no-bpmndi", {
+    check,
   });
-
 };
-
 
 // helpers /////////////////////////////
 
@@ -63,45 +52,52 @@ module.exports = function() {
  * @return { { id: string, $type: string }[] } A flat array with all BPMN elements, each represented with { id: elementId, $type: elementType }
  */
 function getAllBpmnElements(rootElements) {
+  return flatten(
+    rootElements.map((rootElement) => {
+      const laneSet =
+        (rootElement.laneSets && rootElement.laneSets[0]) ||
+        rootElement.childLaneSet;
 
-  return flatten(rootElements.map((rootElement) => {
-    const laneSet =
-      rootElement.laneSets && rootElement.laneSets[0] || rootElement.childLaneSet;
+      // Include
+      // * flowElements (e.g., tasks, sequenceFlows),
+      // * nested flowElements,
+      // * participants,
+      // * artifacts (groups),
+      // * laneSets
+      // * nested laneSets
+      // * childLaneSets
+      // * nested childLaneSets
+      // * messageFlows
+      const elements = flatten([
+        rootElement.flowElements || [],
+        (rootElement.flowElements &&
+          getAllBpmnElements(
+            rootElement.flowElements.filter(hasFlowElements),
+          )) ||
+          [],
+        rootElement.participants || [],
+        rootElement.artifacts || [],
+        (laneSet && laneSet.lanes) || [],
+        (laneSet &&
+          laneSet.lanes &&
+          getAllBpmnElements(laneSet.lanes.filter(hasChildLaneSet))) ||
+          [],
+        rootElement.messageFlows || [],
+      ]);
 
-    // Include
-    // * flowElements (e.g., tasks, sequenceFlows),
-    // * nested flowElements,
-    // * participants,
-    // * artifacts (groups),
-    // * laneSets
-    // * nested laneSets
-    // * childLaneSets
-    // * nested childLaneSets
-    // * messageFlows
-    const elements = flatten([
-      rootElement.flowElements || [],
-      (rootElement.flowElements && getAllBpmnElements(rootElement.flowElements.filter(hasFlowElements))) || [],
-      rootElement.participants || [],
-      rootElement.artifacts || [],
-      laneSet && laneSet.lanes || [],
-      laneSet && laneSet.lanes && getAllBpmnElements(laneSet.lanes.filter(hasChildLaneSet)) || [],
-      rootElement.messageFlows || []
-    ]);
-
-    if (elements.length > 0) {
-      return elements.map((element) => {
-
-        return {
-          id: element.id,
-          $type: element.$type
-        };
-      });
-    } else {
-
-      // We are not interested in the rest here (DI)
-      return [];
-    }
-  }));
+      if (elements.length > 0) {
+        return elements.map((element) => {
+          return {
+            id: element.id,
+            $type: element.$type,
+          };
+        });
+      } else {
+        // We are not interested in the rest here (DI)
+        return [];
+      }
+    }),
+  );
 }
 
 /**
@@ -115,15 +111,13 @@ function getAllBpmnElements(rootElements) {
  */
 function getAllDiBpmnReferences(definitionsNode) {
   return flatten(
-    definitionsNode.get('diagrams').map((diagram) => {
-
+    definitionsNode.get("diagrams").map((diagram) => {
       const diElements = diagram.plane.planeElement || [];
 
       return diElements.map((element) => {
-
         return element.bpmnElement?.id;
       });
-    })
+    }),
   );
 }
 
@@ -133,7 +127,7 @@ function getAllDiBpmnReferences(definitionsNode) {
  * @return {boolean}
  */
 function hasVisualRepresentation(element) {
-  const noVisRepresentation = [ 'bpmn:DataObject' ];
+  const noVisRepresentation = ["bpmn:DataObject"];
 
   return noVisRepresentation.includes(element.$type) ? false : true;
 }

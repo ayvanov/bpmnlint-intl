@@ -1,11 +1,8 @@
-const {
-  is
-} = require('bpmnlint-utils');
+"use strict";
 
-const {
-  annotateRule
-} = require('./helper');
+const { is } = require("bpmnlint-utils");
 
+const { annotateRule, t } = require("./helper");
 
 /**
  * A rule that checks whether not more than one blank start event
@@ -13,19 +10,16 @@ const {
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function check(node, reporter) {
-
-    if (!is(node, 'bpmn:FlowElementsContainer')) {
+    if (!is(node, "bpmn:FlowElementsContainer")) {
       return;
     }
 
     const flowElements = node.flowElements || [];
 
-    const blankStartEvents = flowElements.filter(function(flowElement) {
-
-      if (!is(flowElement, 'bpmn:StartEvent')) {
+    const blankStartEvents = flowElements.filter(function (flowElement) {
+      if (!is(flowElement, "bpmn:StartEvent")) {
         return false;
       }
 
@@ -35,14 +29,18 @@ module.exports = function() {
     });
 
     if (blankStartEvents.length > 1) {
-      const type = is(node, 'bpmn:SubProcess') ? 'Sub process' : 'Process';
+      const type = is(node, "bpmn:SubProcess")
+        ? t("types.subProcess")
+        : t("types.process");
 
-      reporter.report(node.id, type + ' has multiple blank start events');
+      reporter.report(
+        node.id,
+        t("singleBlankStartEvent.multipleBlankStartEvents", { type }),
+      );
     }
   }
 
-  return annotateRule('single-blank-start-event', {
-    check
+  return annotateRule("single-blank-start-event", {
+    check,
   });
-
 };

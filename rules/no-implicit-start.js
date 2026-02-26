@@ -1,24 +1,23 @@
-const {
-  is,
-  isAny
-} = require('bpmnlint-utils');
+"use strict";
 
-const {
-  annotateRule
-} = require('./helper');
+const { is, isAny } = require("bpmnlint-utils");
+
+const { annotateRule, t } = require("./helper");
 
 /**
  * A rule that checks that an element is not an implicit start (token spawn).
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function() {
-
+module.exports = function () {
   function isLinkEvent(node) {
     const eventDefinitions = node.eventDefinitions || [];
 
-    return eventDefinitions.length && eventDefinitions.every(
-      definition => is(definition, 'bpmn:LinkEventDefinition')
+    return (
+      eventDefinitions.length &&
+      eventDefinitions.every((definition) =>
+        is(definition, "bpmn:LinkEventDefinition"),
+      )
     );
   }
 
@@ -29,23 +28,23 @@ module.exports = function() {
   function isImplicitStart(node) {
     const incoming = node.incoming || [];
 
-    if (is(node, 'bpmn:Activity') && isForCompensation(node)) {
+    if (is(node, "bpmn:Activity") && isForCompensation(node)) {
       return false;
     }
 
-    if (is(node.$parent, 'bpmn:AdHocSubProcess')) {
+    if (is(node.$parent, "bpmn:AdHocSubProcess")) {
       return false;
     }
 
-    if (is(node, 'bpmn:SubProcess') && node.triggeredByEvent) {
+    if (is(node, "bpmn:SubProcess") && node.triggeredByEvent) {
       return false;
     }
 
-    if (is(node, 'bpmn:IntermediateCatchEvent') && isLinkEvent(node)) {
+    if (is(node, "bpmn:IntermediateCatchEvent") && isLinkEvent(node)) {
       return false;
     }
 
-    if (isAny(node, [ 'bpmn:StartEvent', 'bpmn:BoundaryEvent' ])) {
+    if (isAny(node, ["bpmn:StartEvent", "bpmn:BoundaryEvent"])) {
       return false;
     }
 
@@ -53,17 +52,16 @@ module.exports = function() {
   }
 
   function check(node, reporter) {
-
-    if (!isAny(node, [ 'bpmn:Event', 'bpmn:Activity', 'bpmn:Gateway' ])) {
+    if (!isAny(node, ["bpmn:Event", "bpmn:Activity", "bpmn:Gateway"])) {
       return;
     }
 
     if (isImplicitStart(node)) {
-      reporter.report(node.id, 'Element is an implicit start');
+      reporter.report(node.id, t("noImplicitStart.implicitStart"));
     }
   }
 
-  return annotateRule('no-implicit-start', {
-    check
+  return annotateRule("no-implicit-start", {
+    check,
   });
 };
