@@ -1,13 +1,13 @@
-const { is } = require("bpmnlint-utils");
+import { is } from "bpmnlint-utils";
 
-const { annotateRule, isInExecutableProcess, t } = require("./helper");
+import { annotateRule, isInExecutableProcess, t } from "./helper.js";
 
 /**
  * Ensures that a conditional event has a condition specified.
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (!isInExecutableProcess(node)) {
       return;
@@ -29,7 +29,7 @@ module.exports = function () {
   return annotateRule("conditional-event", {
     check,
   });
-};
+}
 
 function getConditionalEventDefinition(node) {
   if (!is(node, "bpmn:Event")) {

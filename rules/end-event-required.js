@@ -1,13 +1,13 @@
-const { is, isAny } = require("bpmnlint-utils");
+import { is, isAny } from "bpmnlint-utils";
 
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that checks the presence of an end event per scope.
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function hasEndEvent(node) {
     const flowElements = node.flowElements || [];
 
@@ -34,4 +34,4 @@ module.exports = function () {
   return annotateRule("end-event-required", {
     check,
   });
-};
+}

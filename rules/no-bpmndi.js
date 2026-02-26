@@ -1,8 +1,8 @@
-const { is } = require("bpmnlint-utils");
+import { is } from "bpmnlint-utils";
 
-const { flatten } = require("min-dash");
+import { flatten } from "min-dash";
 
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * @typedef { import('../lib/types.js').ModdleElement } ModdleElement
@@ -14,7 +14,7 @@ const { annotateRule, t } = require("./helper");
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (!is(node, "bpmn:Definitions")) {
       return false;
@@ -40,7 +40,7 @@ module.exports = function () {
   return annotateRule("no-bpmndi", {
     check,
   });
-};
+}
 
 // helpers /////////////////////////////
 

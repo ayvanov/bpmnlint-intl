@@ -1,13 +1,13 @@
-const { is, isAny } = require("bpmnlint-utils");
+import { is, isAny } from "bpmnlint-utils";
 
-const { findParent, annotateRule, t } = require("./helper");
+import { findParent, annotateRule, t } from "./helper.js";
 
 /**
  * A rule that checks that an element is not an implicit end (token sink).
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function isLinkEvent(node) {
     const eventDefinitions = node.eventDefinitions || [];
 
@@ -97,4 +97,4 @@ module.exports = function () {
   return annotateRule("no-implicit-end", {
     check,
   });
-};
+}

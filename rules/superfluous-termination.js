@@ -1,8 +1,6 @@
-"use strict";
+import { is, isAny } from "bpmnlint-utils";
 
-const { is, isAny } = require("bpmnlint-utils");
-
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that checks, whether a termination end event is superfluous,
@@ -10,7 +8,7 @@ const { annotateRule, t } = require("./helper");
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (!isAny(node, ["bpmn:Process", "bpmn:SubProcess"])) {
       return;
@@ -45,7 +43,7 @@ module.exports = function () {
   return annotateRule("superfluous-termination", {
     check,
   });
-};
+}
 
 function isTerminateEnd(element) {
   return (

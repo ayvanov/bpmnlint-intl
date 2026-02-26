@@ -1,6 +1,6 @@
-const { is } = require("bpmnlint-utils");
+import { is } from "bpmnlint-utils";
 
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that checks, whether an event-based gateway:
@@ -9,7 +9,7 @@ const { annotateRule, t } = require("./helper");
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (!is(node, "bpmn:EventBasedGateway")) {
       return;
@@ -31,7 +31,7 @@ module.exports = function () {
   return annotateRule("event-based-gateway", {
     check,
   });
-};
+}
 
 function hasCondition(flow) {
   return !!flow.conditionExpression;

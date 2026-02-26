@@ -1,15 +1,13 @@
-"use strict";
+import { is, isAny } from "bpmnlint-utils";
 
-const { is, isAny } = require("bpmnlint-utils");
-
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that checks for the presence of a start event per scope.
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function hasStartEvent(node) {
     const flowElements = node.flowElements || [];
 
@@ -39,4 +37,4 @@ module.exports = function () {
   return annotateRule("start-event-required", {
     check,
   });
-};
+}

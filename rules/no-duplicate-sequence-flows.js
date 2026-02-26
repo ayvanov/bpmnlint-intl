@@ -1,8 +1,6 @@
-"use strict";
+import { is } from "bpmnlint-utils";
 
-const { is } = require("bpmnlint-utils");
-
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that verifies that there are no disconnected
@@ -10,7 +8,7 @@ const { annotateRule, t } = require("./helper");
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   const keyed = {};
 
   const outgoingReported = {};
@@ -54,7 +52,7 @@ module.exports = function () {
   return annotateRule("no-duplicate-sequence-flows", {
     check,
   });
-};
+}
 
 // helpers /////////////////
 

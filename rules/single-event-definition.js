@@ -1,15 +1,13 @@
-"use strict";
+import { is } from "bpmnlint-utils";
 
-const { is } = require("bpmnlint-utils");
-
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that verifies that an event contains maximum one event definition.
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (!is(node, "bpmn:Event")) {
       return;
@@ -27,4 +25,4 @@ module.exports = function () {
   return annotateRule("single-event-definition", {
     check,
   });
-};
+}

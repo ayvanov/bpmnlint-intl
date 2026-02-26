@@ -1,4 +1,4 @@
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that checks that sequence flows outgoing from a
@@ -7,7 +7,7 @@ const { annotateRule, t } = require("./helper");
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (!isConditionalForking(node)) {
       return;
@@ -30,7 +30,7 @@ module.exports = function () {
   return annotateRule("conditional-flows", {
     check,
   });
-};
+}
 
 // helpers /////////////////////////////
 

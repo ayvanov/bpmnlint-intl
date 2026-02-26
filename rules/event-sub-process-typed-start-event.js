@@ -1,6 +1,6 @@
-const { is } = require("bpmnlint-utils");
+import { is } from "bpmnlint-utils";
 
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that checks that start events inside an event sub-process
@@ -8,7 +8,7 @@ const { annotateRule, t } = require("./helper");
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (!is(node, "bpmn:SubProcess") || !node.triggeredByEvent) {
       return;
@@ -36,4 +36,4 @@ module.exports = function () {
   return annotateRule("event-sub-process-typed-start-event", {
     check,
   });
-};
+}

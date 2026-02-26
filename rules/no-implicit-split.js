@@ -1,8 +1,6 @@
-"use strict";
+import { isAny } from "bpmnlint-utils";
 
-const { isAny } = require("bpmnlint-utils");
-
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that checks that no implicit split is modeled
@@ -13,7 +11,7 @@ const { annotateRule, t } = require("./helper");
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (!isAny(node, ["bpmn:Activity", "bpmn:Event"])) {
       return;
@@ -33,7 +31,7 @@ module.exports = function () {
   return annotateRule("no-implicit-split", {
     check,
   });
-};
+}
 
 // helpers /////////////////////////////
 

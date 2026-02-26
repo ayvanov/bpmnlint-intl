@@ -1,8 +1,6 @@
-"use strict";
+import { is } from "bpmnlint-utils";
 
-const { is } = require("bpmnlint-utils");
-
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that checks that start events inside a normal sub-processes
@@ -10,7 +8,7 @@ const { annotateRule, t } = require("./helper");
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (!is(node, "bpmn:SubProcess") || node.triggeredByEvent) {
       return;
@@ -38,4 +36,4 @@ module.exports = function () {
   return annotateRule("sub-process-blank-start-event", {
     check,
   });
-};
+}

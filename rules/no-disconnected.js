@@ -1,8 +1,6 @@
-"use strict";
+import { isAny, is } from "bpmnlint-utils";
 
-const { isAny, is } = require("bpmnlint-utils");
-
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that verifies that there exists no disconnected
@@ -10,7 +8,7 @@ const { annotateRule, t } = require("./helper");
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (
       !isAny(node, [
@@ -47,7 +45,7 @@ module.exports = function () {
   return annotateRule("no-disconnected", {
     check,
   });
-};
+}
 
 // helpers /////////////////
 

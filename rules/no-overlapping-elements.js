@@ -1,8 +1,6 @@
-"use strict";
+import { is } from "bpmnlint-utils";
 
-const { is } = require("bpmnlint-utils");
-
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * Rule that checks if two elements overlap except:
@@ -12,7 +10,7 @@ const { annotateRule, t } = require("./helper");
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (!is(node, "bpmn:Definitions")) {
       return;
@@ -63,7 +61,7 @@ module.exports = function () {
   return annotateRule("no-overlapping-elements", {
     check,
   });
-};
+}
 
 // helpers /////////////////
 

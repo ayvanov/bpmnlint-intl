@@ -1,6 +1,6 @@
-const { is } = require("bpmnlint-utils");
+import { is } from "bpmnlint-utils";
 
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that ensures that an Ad Hoc Sub Process is valid according to the BPMN spec:
@@ -9,7 +9,7 @@ const { annotateRule, t } = require("./helper");
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (!is(node, "bpmn:AdHocSubProcess")) {
       return;
@@ -37,4 +37,4 @@ module.exports = function () {
   return annotateRule("ad-hoc-sub-process", {
     check,
   });
-};
+}

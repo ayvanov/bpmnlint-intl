@@ -1,10 +1,8 @@
-"use strict";
+import { groupBy } from "min-dash";
 
-const { groupBy } = require("min-dash");
+import { is } from "bpmnlint-utils";
 
-const { is } = require("bpmnlint-utils");
-
-const { annotateRule, t } = require("./helper");
+import { annotateRule, t } from "./helper.js";
 
 /**
  * A rule that verifies that link events are properly used.
@@ -19,7 +17,7 @@ const { annotateRule, t } = require("./helper");
  *
  * @type { import('../lib/types.js').RuleFactory }
  */
-module.exports = function () {
+export default function () {
   function check(node, reporter) {
     if (!is(node, "bpmn:FlowElementsContainer")) {
       return;
@@ -73,7 +71,7 @@ module.exports = function () {
   return annotateRule("link-event", {
     check,
   });
-};
+}
 
 // helpers /////////////////
 
