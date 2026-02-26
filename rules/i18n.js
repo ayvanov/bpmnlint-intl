@@ -1,7 +1,5 @@
-'use strict';
-
-const en = require('./locales/en');
-const ru = require('./locales/ru');
+import en from "./locales/en.js";
+import ru from "./locales/ru.js";
 
 /**
  * @type { Record<string, Record<string, string>> }
@@ -11,7 +9,7 @@ const locales = { en, ru };
 /**
  * @type { string }
  */
-let currentLocale = 'en';
+let currentLocale = "en";
 
 /**
  * Set the active locale for rule messages.
@@ -20,10 +18,10 @@ let currentLocale = 'en';
  *
  * @throws { Error } if the locale is not supported
  */
-function setLocale(locale) {
+export function setLocale(locale) {
   if (!locales[locale]) {
     throw new Error(
-      `Unsupported locale: "${locale}". Available locales: ${Object.keys(locales).join(', ')}`
+      `Unsupported locale: "${locale}". Available locales: ${Object.keys(locales).join(", ")}`,
     );
   }
   currentLocale = locale;
@@ -34,7 +32,7 @@ function setLocale(locale) {
  *
  * @return { string }
  */
-function getLocale() {
+export function getLocale() {
   return currentLocale;
 }
 
@@ -55,13 +53,13 @@ function getLocale() {
  *
  * @return { string }
  */
-function t(key, params) {
-  const messages = locales[currentLocale] || locales['en'];
+export function t(key, params) {
+  const messages = locales[currentLocale] || locales["en"];
 
   let message = messages[key];
 
   if (message === undefined) {
-    message = locales['en'][key];
+    message = locales["en"][key];
   }
 
   if (message === undefined) {
@@ -76,5 +74,3 @@ function t(key, params) {
 
   return message;
 }
-
-module.exports = { t, setLocale, getLocale };
