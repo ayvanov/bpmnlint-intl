@@ -1,7 +1,7 @@
-import { Linter, setLocale, getLocale } from "./lib/index.js";
+import { Linter, setLocale, getLocale } from "../lib/index.js";
 import { BpmnModdle } from "bpmn-moddle";
-import StaticResolver from "./lib/resolver/static-resolver.js";
-import noDisconnected from "./rules/no-disconnected.js";
+import StaticResolver from "../lib/resolver/static-resolver.js";
+import noDisconnected from "../rules/no-disconnected.js";
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
