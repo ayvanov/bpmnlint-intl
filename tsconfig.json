@@ -5,10 +5,11 @@
     "moduleResolution": "Node16",
     "target": "ES2020",
     "strict": true,
+    "allowJs": true,
     "checkJs": true,
     "noImplicitAny": false,
     "resolveJsonModule": true,
-    "noEmit": true,
+    "noEmit": true
   },
   "include": [
     "./lib/**/*.d.ts",
