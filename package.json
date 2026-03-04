@@ -1,7 +1,7 @@
 {
   "name": "bpmnlint-intl",
   "description": "BPMN validation via configurable lint rules with multi-language support. (bpmnlint fork)",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "./dist/index.js",
   "exports": {
