@@ -72,7 +72,6 @@
   },
   "files": [
     "dist",
-    "config",
-    "rules"
+    "config"
   ]
 }
