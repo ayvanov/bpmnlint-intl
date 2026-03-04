@@ -17,7 +17,7 @@ npm install bpmnlint-intl
 Create custom linter class with desired rules:
 ```javascript
 import {Linter, resolveConfig, setLocale, StaticResolver} from 'bpmnlint-intl';
-import correctness from 'bpmnlint/config/correctness';
+import correctness from 'bpmnlint-intl/config/correctness';
 import {configs} from 'bpmnlint-plugin-camunda-compat';
 import historyTTLRule from 'bpmnlint-plugin-camunda-compat/rules/camunda-platform/history-time-to-live.js';
 
