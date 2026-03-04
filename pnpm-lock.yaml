@@ -8,46 +8,40 @@ importers:
 
   .:
     dependencies:
+      bpmnlint-utils:
+        specifier: ^1.1.1
+        version: 1.1.1
+      min-dash:
+        specifier: ^5.0.0
+        version: 5.0.0
+    devDependencies:
+      '@bpmn-io/bpmnlint-generate-docs-images':
+        specifier: ^1.2.0
+        version: 1.2.0(bpmnlint@11.12.0)(diagram-js@15.9.1)(puppeteer@24.37.4(typescript@5.9.3))
       '@bpmn-io/moddle-utils':
         specifier: ^0.3.0
         version: 0.3.0
+      '@types/mocha':
+        specifier: ^10.0.10
+        version: 10.0.10
+      '@types/node':
+        specifier: ^25.3.3
+        version: 25.3.3
       ansi-colors:
         specifier: ^4.1.3
         version: 4.1.3
       bpmn-moddle:
         specifier: ^10.0.0
         version: 10.0.0
-      bpmnlint-utils:
-        specifier: ^1.1.1
-        version: 1.1.1
+      chai:
+        specifier: ^6.2.2
+        version: 6.2.2
       cli-table:
         specifier: ^0.3.11
         version: 0.3.11
       color-support:
         specifier: ^1.1.3
         version: 1.1.3
-      min-dash:
-        specifier: ^5.0.0
-        version: 5.0.0
-      mri:
-        specifier: ^1.2.0
-        version: 1.2.0
-      pluralize:
-        specifier: ^8.0.0
-        version: 8.0.0
-      tiny-glob:
-        specifier: ^0.2.9
-        version: 0.2.9
-    devDependencies:
-      '@bpmn-io/bpmnlint-generate-docs-images':
-        specifier: ^1.2.0
-        version: 1.2.0(bpmnlint@11.12.0)(diagram-js@15.9.1)(puppeteer@24.37.4(typescript@5.9.3))
-      '@types/mocha':
-        specifier: ^10.0.10
-        version: 10.0.10
-      chai:
-        specifier: ^6.2.2
-        version: 6.2.2
       eslint:
         specifier: ^9.39.2
         version: 9.39.2
@@ -63,15 +57,24 @@ importers:
       mocha:
         specifier: ^11.7.5
         version: 11.7.5
+      mri:
+        specifier: ^1.2.0
+        version: 1.2.0
       npm-run-all2:
         specifier: ^8.0.4
         version: 8.0.4
       nyc:
         specifier: ^17.1.0
         version: 17.1.0
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
       strip-indent:
         specifier: ^4.1.1
         version: 4.1.1
+      tiny-glob:
+        specifier: ^0.2.9
+        version: 0.2.9
       tsdown:
         specifier: 0.21.0-beta.2
         version: 0.21.0-beta.2(typescript@5.9.3)
@@ -565,8 +568,8 @@ packages:
   '@types/mocha@10.0.10':
     resolution: {integrity: sha512-xPyYSz1cMPnJQhl0CLMH68j3gprKZaTjG3s5Vi+fDgx+uhG9NOXwbVt52eFS8ECyXhyKcjDLCBEqBExKuiZb7Q==}
 
-  '@types/node@25.3.0':
-    resolution: {integrity: sha512-4K3bqJpXpqfg2XKGK9bpDTc6xO/xoUP/RBWS7AtRMug6zZFaRekiLzjVtAoZMquxoAbzBvy5nxQ7veS5eYzf8A==}
+  '@types/node@25.3.3':
+    resolution: {integrity: sha512-DpzbrH7wIcBaJibpKo9nnSQL0MTRdnWttGyE5haGwK86xgMOkFLp7vEyfQPGLOJh5wNYiJ3V9PmUMDhV9u8kkQ==}
 
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
@@ -2985,16 +2988,15 @@ snapshots:
 
   '@types/mocha@10.0.10': {}
 
-  '@types/node@25.3.0':
+  '@types/node@25.3.3':
     dependencies:
       undici-types: 7.18.2
-    optional: true
 
   '@types/resolve@1.20.2': {}
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 25.3.0
+      '@types/node': 25.3.3
     optional: true
 
   acorn-jsx@5.3.2(acorn@8.15.0):
@@ -5132,8 +5134,7 @@ snapshots:
       '@quansync/fs': 1.0.0
       quansync: 1.0.0
 
-  undici-types@7.18.2:
-    optional: true
+  undici-types@7.18.2: {}
 
   unicorn-magic@0.3.0: {}
 
