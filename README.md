@@ -23,24 +23,26 @@ import historyTTLRule from 'bpmnlint-plugin-camunda-compat/rules/camunda-platfor
 
 export default class CustomLinter {
 
+    export default class PlatformLinter {
+
     constructor({locale = 'en'} = {}) {
         setLocale(locale);
-        const cache = resolveConfig([correctness]);
-        cache['rule:bpmnlint/history-time-to-live'] = historyTTLRule;
-        const resolver = new StaticResolver(cache);
-        this.linter = new Linter({
-            resolver, config: {
-                rules: {
-                    ...correctness.rules,
-                    ...configs['camunda-platform-7-24'].rules
-                }
+        this.cache = resolveConfig([correctness]);
+        this.cache['rule:bpmnlint/history-time-to-live'] = historyTTLRule;
+        this.config = {
+            rules: {
+                ...correctness.rules,
+                ...configs['camunda-platform-7-24'].rules
             }
-        });
+        };
     }
 
     async lint(root) {
-        return this.linter.lint(root);
+        return new Linter({
+            resolver: new StaticResolver(this.cache), config: this.config
+        }).lint(root);
     }
+}
 }
 ```
 Use it:
