@@ -17,16 +17,17 @@ npm install bpmnlint-intl
 Create custom linter class with desired rules:
 ```javascript
 import {Linter, resolveConfig, setLocale, StaticResolver} from 'bpmnlint-intl';
+//bundled rules
 import correctness from 'bpmnlint-intl/config/correctness';
+// other rules
 import {configs} from 'bpmnlint-plugin-camunda-compat';
 import historyTTLRule from 'bpmnlint-plugin-camunda-compat/rules/camunda-platform/history-time-to-live.js';
 
 export default class CustomLinter {
 
-    export default class PlatformLinter {
-
     constructor({locale = 'en'} = {}) {
         setLocale(locale);
+        // helper to build cache
         this.cache = resolveConfig([correctness]);
         this.cache['rule:bpmnlint/history-time-to-live'] = historyTTLRule;
         this.config = {
@@ -43,19 +44,18 @@ export default class CustomLinter {
         }).lint(root);
     }
 }
-}
 ```
 Use it:
 
 ```javascript
 const linter = new CustomLinter({locale: 'ru'});
 const {rootElement} = await modeler.get('moddle').fromXML(xml);
-const reports = await this.linter.lint(rootElement);
+const reports = await linter.lint(rootElement);
 console.log(reports);
 ```
 ## Rules
 
-Our [documentation](https://github.com/bpmn-io/bpmnlint/tree/main/docs/rules#rules) lists all currenty implemented rules, the [`./rules` folder](https://github.com/bpmn-io/bpmnlint/tree/main/rules) contains each rules implementation.
+bpmnlint [documentation](https://github.com/bpmn-io/bpmnlint/tree/main/docs/rules#rules) lists all currenty implemented rules, the [`./rules` folder](https://github.com/bpmn-io/bpmnlint/tree/main/rules) contains each rules implementation.
 
 Do you miss a rule that should be included? [Propose a new rule](https://github.com/bpmn-io/bpmnlint/issues/new?assignees=&labels=rules&template=NEW_RULE.md).
 
